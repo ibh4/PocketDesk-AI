@@ -474,71 +474,23 @@ App 内置多类日志：
 
 ### 6.1 总体架构
 
-```mermaid
-flowchart TD
-    subgraph UI[UI 层：Jetpack Compose]
-        A1[ChatScreen 对话]
-        A2[NotesScreen 笔记]
-        A3[MiniAppsScreen 小程序]
-        A4[ErrorLogScreen 日志]
-        A5[FileSearchScreen 文件检索]
-    end
+flowchart LR
+    UI[UI层<br/>对话｜笔记｜小程序｜日志｜文件检索]
+    VM[状态调度层<br/>ViewModel｜Router｜PromptBuilder]
+    AGENT[端侧Agent层<br/>Chat｜Memory｜Note｜File｜Python｜Log]
+    ENGINE[模型执行层<br/>MNN本地模型｜Qwen在线｜Chaquopy]
+    DATA[本地数据层<br/>memory.md｜notes｜file_index｜logs｜workspace]
 
-    subgraph VM[状态与调度层]
-        B1[ChatViewModel]
-        B2[ChatEngineRouter]
-        B3[PromptBuilder]
-    end
-
-    subgraph AGENT[端侧 Agent 能力层]
-        C1[Chat Agent]
-        C2[Memory Agent]
-        C3[Note Agent]
-        C4[File Agent]
-        C5[Python Agent]
-        C6[Log Agent]
-    end
-
-    subgraph ENGINE[模型与执行层]
-        D1[LocalLlmEngine]
-        D2[NativeMnnLlm JNI]
-        D3[MNN C++ Runtime]
-        D4[QwenOnlineEngine]
-        D5[Chaquopy Python]
-    end
-
-    subgraph DATA[本地数据层]
-        E1[memory.md]
-        E2[note/*.md]
-        E3[file_index.json]
-        E4[logs/*.log]
-        E5[workspace]
-    end
-
-    UI --> VM
-    VM --> AGENT
+    UI --> VM --> AGENT
     AGENT --> ENGINE
     AGENT --> DATA
     ENGINE --> DATA
-
-    class A1,A2,A3,A4,A5 uiNode
-    class B1,B2,B3 vmNode
-    class C1,C2,C3,C4,C5,C6 agentNode
-    class D1,D2,D3,D4,D5 engineNode
-    class E1,E2,E3,E4,E5 dataNode
 
     style UI fill:#EFF6FF,stroke:#2563EB,color:#0F172A,stroke-width:2px
     style VM fill:#DBEAFE,stroke:#1D4ED8,color:#0F172A,stroke-width:2px
     style AGENT fill:#F5F3FF,stroke:#7C3AED,color:#2E1065,stroke-width:2px
     style ENGINE fill:#FEF3C7,stroke:#F59E0B,color:#78350F,stroke-width:2px
     style DATA fill:#ECFDF5,stroke:#059669,color:#064E3B,stroke-width:2px
-
-    classDef uiNode fill:#FFFFFF,stroke:#60A5FA,color:#0F172A,stroke-width:1.5px
-    classDef vmNode fill:#FFFFFF,stroke:#2563EB,color:#0F172A,stroke-width:1.5px
-    classDef agentNode fill:#FFFFFF,stroke:#7C3AED,color:#2E1065,stroke-width:1.5px
-    classDef engineNode fill:#FFFFFF,stroke:#F59E0B,color:#78350F,stroke-width:1.5px
-    classDef dataNode fill:#FFFFFF,stroke:#10B981,color:#064E3B,stroke-width:1.5px
-```
 
 ### 6.2 技术栈
 
